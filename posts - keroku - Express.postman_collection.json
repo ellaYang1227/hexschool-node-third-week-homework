@@ -1,0 +1,29 @@
+{
+	"info": {
+		"_postman_id": "6f2ade2c-5781-44c4-813f-db2eeadac901",
+		"name": "posts - keroku - Express",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "取得所有貼文",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://lit-fjord-31246.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"lit-fjord-31246",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
