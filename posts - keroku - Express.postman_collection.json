@@ -24,6 +24,106 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "新增單筆貼文",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"楊小奕 heroku3\",\r\n    \"image\": \"http://dummyimage.com/197x100.png/dddddd/000000\",\r\n    \"content\": \"哈囉~~~大家好，我是楊小奕\",\r\n    \"type\": \"fan\",\r\n    \"tags\": [\"自我介紹\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://lit-fjord-31246.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"lit-fjord-31246",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除單筆貼文",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://lit-fjord-31246.herokuapp.com/posts/626b7bc3baf9abc657be17c0",
+					"protocol": "https",
+					"host": [
+						"lit-fjord-31246",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						"626b7bc3baf9abc657be17c0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "編輯單筆貼文",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"\",\r\n    \"image\": \"http://dummyimage.com/197x100.png/dddddd/000000\",\r\n    \"content\": \"哈囉~~~大家好，我是楊小奕\",\r\n    \"type\": \"fan\",\r\n    \"tags\": [\"自我介紹\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://lit-fjord-31246.herokuapp.com/posts/626b7bc2baf9abc657be17be",
+					"protocol": "https",
+					"host": [
+						"lit-fjord-31246",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						"626b7bc2baf9abc657be17be"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刪除所有貼文",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://lit-fjord-31246.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"lit-fjord-31246",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
