@@ -1,11 +1,13 @@
 const errorMag = {
-    'data': '沒有資料',
+    'data': '沒有資料或空值',
     'id': '沒有此 _id',
     'format': '格式錯誤',
-    'routing': '沒有此路由'
+    'routing': '沒有此路由',
+    'requireds': '必填欄位'
 };
 
 const errorHandle = (res, statusCode, error) => {
+  console.log('123')
   error = errorMag.hasOwnProperty(error) ? errorMag[error] : error;
     res.status(statusCode).json({
       "status": false,
@@ -13,4 +15,4 @@ const errorHandle = (res, statusCode, error) => {
     });
 };
 
-module.exports = errorHandle;
+module.exports = { errorMag, errorHandle };
