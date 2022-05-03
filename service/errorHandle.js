@@ -7,7 +7,6 @@ const errorMag = {
 };
 
 const errorHandle = (res, statusCode, error) => {
-  console.log('123')
   error = errorMag.hasOwnProperty(error) ? errorMag[error] : error;
     res.status(statusCode).json({
       "status": false,
