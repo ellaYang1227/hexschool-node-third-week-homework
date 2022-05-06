@@ -31,7 +31,7 @@ const posts = {
     }
   },
   async delPosts(req, res, next) {
-    if (req.url === "/posts") {
+    if (req.originalUrl === "/posts") {
       await Post.deleteMany({});
       successHandle(res, []);
     } else {
