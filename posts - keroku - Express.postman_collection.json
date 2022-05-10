@@ -11,7 +11,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://lit-fjord-31246.herokuapp.com/posts",
+					"raw": "https://lit-fjord-31246.herokuapp.com/posts?sort=&keyword=",
 					"protocol": "https",
 					"host": [
 						"lit-fjord-31246",
@@ -20,6 +20,16 @@
 					],
 					"path": [
 						"posts"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": ""
+						},
+						{
+							"key": "keyword",
+							"value": ""
+						}
 					]
 				}
 			},
@@ -32,7 +42,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"楊小奕 heroku3\",\r\n    \"image\": \"http://dummyimage.com/197x100.png/dddddd/000000\",\r\n    \"content\": \"哈囉~~~大家好，我是楊小奕\",\r\n    \"type\": \"fan\",\r\n    \"tags\": [\"自我介紹\"]\r\n}",
+					"raw": "{\r\n    \"user\": \"6277a42413f55538b37263df\",\r\n    \"name\": \"heroku0510\",\r\n    \"image\": \"https://picsum.photos/id/237/500\",\r\n    \"content\": \"哈囉~~~大家好，我是歪歪\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -60,7 +70,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "https://lit-fjord-31246.herokuapp.com/posts/626b7bc3baf9abc657be17c0",
+					"raw": "https://lit-fjord-31246.herokuapp.com/posts/627a691eae3f49929ad138ac",
 					"protocol": "https",
 					"host": [
 						"lit-fjord-31246",
@@ -69,7 +79,7 @@
 					],
 					"path": [
 						"posts",
-						"626b7bc3baf9abc657be17c0"
+						"627a691eae3f49929ad138ac"
 					]
 				}
 			},
@@ -82,7 +92,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"\",\r\n    \"image\": \"http://dummyimage.com/197x100.png/dddddd/000000\",\r\n    \"content\": \"哈囉~~~大家好，我是楊小奕\",\r\n    \"type\": \"fan\",\r\n    \"tags\": [\"自我介紹\"]\r\n}",
+					"raw": "{\r\n    \"image\": \"https://i.picsum.photos/id/1000/500/\",\r\n    \"content\": \"歪歪修改\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -90,7 +100,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://lit-fjord-31246.herokuapp.com/posts/626b7bc2baf9abc657be17be",
+					"raw": "https://lit-fjord-31246.herokuapp.com/posts/627a687df0d4aad0a5f23d44",
 					"protocol": "https",
 					"host": [
 						"lit-fjord-31246",
@@ -99,7 +109,7 @@
 					],
 					"path": [
 						"posts",
-						"626b7bc2baf9abc657be17be"
+						"627a687df0d4aad0a5f23d44"
 					]
 				}
 			},

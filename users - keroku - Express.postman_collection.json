@@ -1,0 +1,80 @@
+{
+	"info": {
+		"_postman_id": "5003e9b5-3e94-47b4-9a62-9fd9b559ab45",
+		"name": "users - keroku - Express",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "取得會員資料",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://lit-fjord-31246.herokuapp.com/users/6277a42413f55538b37263df",
+					"protocol": "https",
+					"host": [
+						"lit-fjord-31246",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"6277a42413f55538b37263df"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "註冊",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"ggggtset1585@gmail.com\",\r\n    \"name\": \"辛巴爺爺 heroku\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://lit-fjord-31246.herokuapp.com/users/signup",
+					"protocol": "https",
+					"host": [
+						"lit-fjord-31246",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "取得所有會員資料",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://lit-fjord-31246.herokuapp.com/users",
+					"protocol": "https",
+					"host": [
+						"lit-fjord-31246",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
