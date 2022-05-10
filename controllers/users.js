@@ -7,8 +7,12 @@ const requireds = ['email', 'name'];
 
 const users = {
   async getUsers(req, res, next) {
-    const users = await User.find().sort('-createdAt');
-    successHandle(res, users);
+    if (req.originalUrl === '/users') {
+      const users = await User.find().sort('-createdAt');
+      successHandle(res, users);
+    } else {
+      errorHandle(res, 400, 'routing');
+    }
   },
   async getUser(req, res, next) {
     try {
@@ -46,7 +50,7 @@ const users = {
       }
     } catch (error) {
       console.error(error);
-      errorHandle(res, 400, error.message);
+      errorHandle(res, 400, error.keyPattern.email ? 'email' : error.message);
     }
   }
 };
