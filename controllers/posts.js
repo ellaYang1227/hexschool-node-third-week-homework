@@ -18,16 +18,16 @@ const posts = {
   async addPost(req, res, next) {
     try {
       const data = req.body;
-      const user = await User.findById(data.user);
-      if (user) {
-        const bodyResultIsPass = checkBodyRequired(
-          requireds,
-          req.method,
-          res,
-          data
-        );
+      const bodyResultIsPass = checkBodyRequired(
+        requireds,
+        req.method,
+        res,
+        data
+      );
 
-        if (bodyResultIsPass) {
+      if (bodyResultIsPass) {
+        const user = await User.findById(data.user);
+        if (user) {
           const newPost = await Post.create({
             user: data.user,
             image: data.image,
@@ -35,11 +35,10 @@ const posts = {
             type: data.type,
             tags: data.tags
           });
-
           successHandle(res, newPost);
+        } else {
+          errorHandle(res, 400, 'user');
         }
-      } else {
-        errorHandle(res, 400, 'user');
       }
     } catch (error) {
       console.error(error);
