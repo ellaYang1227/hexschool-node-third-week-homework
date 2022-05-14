@@ -8,7 +8,6 @@ const errorMag = {
   syntax: '語法錯誤',
   routing: '沒有此路由',
   requireds: '必填欄位',
-  user: '沒有此 user',
   500: '系統錯誤，請洽系統管理員'
 };
 

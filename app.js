@@ -72,7 +72,7 @@ app.use((err, req, res, next) => {
     err.isOperational = true;
     return resErrorProd(err, res);
   } else if (err.name === 'CastError') {
-    err.message = err.path === '_id' ? 'id' : 'data';
+    err.message = err.path === '_id' ? 'id' : 'validation';
     err.isOperational = true;
     return resErrorProd(err, res);
   } else if (err.name === 'SyntaxError') {
