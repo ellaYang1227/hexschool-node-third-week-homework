@@ -1,6 +1,6 @@
 const User = require('../models/users');
 const successHandle = require('../service/successHandle');
-const { errorHandle } = require('../service/errorHandle');
+const appError = require('../service/appError');
 const checkBodyRequired = require('../tools/checkBodyRequired');
 
 const requireds = ['email', 'name'];
@@ -11,46 +11,35 @@ const users = {
       const users = await User.find().sort('-createdAt');
       successHandle(res, users);
     } else {
-      errorHandle(res, 400, 'routing');
+      return next(appError(404, 'routing', next));
     }
   },
   async getUser(req, res, next) {
-    try {
-      const id = req.params.id;
-      const user = await User.findById(id);
-      if (user) {
-        successHandle(res, user);
-      } else {
-        errorHandle(res, 400, 'id');
-      }
-    } catch (error) {
-      console.error(error);
-      const err = error.path === '_id' ? 'id' : error.message;
-      errorHandle(res, 400, err);
+    const id = req.params.id;
+    const user = await User.findById(id);
+    if (user) {
+      successHandle(res, user);
+    } else {
+      return next(appError(400, 'id', next));
     }
   },
   async signup(req, res, next) {
-    try {
-      const data = req.body;
-      const bodyResultIsPass = checkBodyRequired(
-        requireds,
-        req.method,
-        res,
-        data
-      );
+    const data = req.body;
+    const bodyResultIsPass = checkBodyRequired(
+      requireds,
+      req.method,
+      data,
+      next
+    );
 
-      if (bodyResultIsPass) {
-        const newUser = await User.create({
-          email: data.email,
-          name: data.name,
-          photo: data.photo
-        });
+    if (bodyResultIsPass) {
+      const newUser = await User.create({
+        email: data.email,
+        name: data.name,
+        photo: data.photo
+      });
 
-        successHandle(res, newUser);
-      }
-    } catch (error) {
-      console.error(error);
-      errorHandle(res, 400, error.keyPattern.email ? 'email' : error.message);
+      successHandle(res, newUser);
     }
   }
 };

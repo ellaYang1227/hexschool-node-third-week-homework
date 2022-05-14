@@ -1,7 +1,7 @@
 const Post = require('../models/posts');
 const User = require('../models/users');
 const successHandle = require('../service/successHandle');
-const { errorHandle } = require('../service/errorHandle');
+const appError = require('../service/appError');
 const checkBodyRequired = require('../tools/checkBodyRequired');
 
 const requireds = ['user', 'content'];
@@ -16,33 +16,29 @@ const posts = {
     successHandle(res, posts);
   },
   async addPost(req, res, next) {
-    try {
-      const data = req.body;
-      const bodyResultIsPass = checkBodyRequired(
-        requireds,
-        req.method,
-        res,
-        data
-      );
+    const data = req.body;
+    const bodyResultIsPass = checkBodyRequired(
+      requireds,
+      req.method,
+      data,
+      next
+    );
 
-      if (bodyResultIsPass) {
-        const user = await User.findById(data.user);
-        if (user) {
-          const newPost = await Post.create({
-            user: data.user,
-            image: data.image,
-            content: data.content,
-            type: data.type,
-            tags: data.tags
-          });
-          successHandle(res, newPost);
-        } else {
-          errorHandle(res, 400, 'user');
-        }
+    if (bodyResultIsPass) {
+      const user = await User.findById(data.user);
+      if (user) {
+        const newPost = await Post.create({
+          user: data.user,
+          image: data.image,
+          content: data.content,
+          type: data.type,
+          tags: data.tags
+        });
+
+        successHandle(res, newPost);
+      } else {
+        return next(appError(400, 'user', next));
       }
-    } catch (error) {
-      console.error(error);
-      errorHandle(res, 400, error.path === '_id' ? 'user' : error.message);
     }
   },
   async delPosts(req, res, next) {
@@ -50,7 +46,7 @@ const posts = {
       await Post.deleteMany({});
       successHandle(res, []);
     } else {
-      errorHandle(res, 400, 'routing');
+      return next(appError(404, 'routing', next));
     }
   },
   async delPost(req, res, next) {
@@ -63,35 +59,30 @@ const posts = {
       })
       .catch((error) => {
         console.error(error);
-        errorHandle(res, 400, 'id');
+        return next(appError(400, 'id', next));
       });
   },
   async etidPost(req, res, next) {
-    try {
-      const id = req.params.id;
-      const data = req.body;
-      const bodyResultIsPass = checkBodyRequired(
-        requireds,
-        req.method,
-        res,
-        data
-      );
+    const id = req.params.id;
+    const data = req.body;
+    const bodyResultIsPass = checkBodyRequired(
+      requireds,
+      req.method,
+      data,
+      next
+    );
 
-      if (bodyResultIsPass) {
-        await Post.findByIdAndUpdate(id, data, {
-          new: true,
-          runValidators: true
-        }).then((update) => {
-          if (update) {
-            successHandle(res, update);
-          } else {
-            errorHandle(res, 400, 'id');
-          }
-        });
-      }
-    } catch (error) {
-      const err = error.path === '_id' ? 'id' : error.message;
-      errorHandle(res, 400, err);
+    if (bodyResultIsPass) {
+      await Post.findByIdAndUpdate(id, data, {
+        new: true,
+        runValidators: true
+      }).then((update) => {
+        if (update) {
+          successHandle(res, update);
+        } else {
+          return next(appError(400, 'id', next));
+        }
+      });
     }
   }
 };
