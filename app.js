@@ -3,6 +3,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const app = express();
+
 const { errorHandle } = require('./service/errorHandle');
 
 require('./connections');
@@ -10,8 +12,6 @@ require('./connections');
 const indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
-
-const app = express();
 
 // 補捉程式錯誤
 process.on('uncaughtException', (err) => {
@@ -79,9 +79,13 @@ app.use((err, req, res, next) => {
     err.message = 'syntax';
     err.isOperational = true;
     return resErrorProd(err, res);
+  } else if (err.name === 'SyntaxError') {
+    err.message = 'syntax';
+    err.isOperational = true;
+    return resErrorProd(err, res);
   } else if (err.code === 11000) {
     if (err.keyPattern.email) {
-      err.message = 'email';
+      err.message = 'emailExist';
     } else {
       const keyPatterns = Object.keys(err.keyPattern);
       err.message = `${keyPatterns} 為唯一索引，已存在`;

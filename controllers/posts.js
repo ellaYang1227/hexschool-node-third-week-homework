@@ -1,10 +1,9 @@
 const Post = require('../models/posts');
-const User = require('../models/users');
 const successHandle = require('../service/successHandle');
 const appError = require('../service/appError');
 const checkBodyRequired = require('../tools/checkBodyRequired');
 
-const requireds = ['user', 'content'];
+const requireds = ['content'];
 
 const posts = {
   async getPosts(req, res, next) {
@@ -25,20 +24,15 @@ const posts = {
     );
 
     if (bodyResultIsPass) {
-      const user = await User.findById(data.user);
-      if (user) {
-        const newPost = await Post.create({
-          user: data.user,
-          image: data.image,
-          content: data.content,
-          type: data.type,
-          tags: data.tags
-        });
+      const newPost = await Post.create({
+        user: req.user.id,
+        image: data.image,
+        content: data.content,
+        type: data.type,
+        tags: data.tags
+      });
 
-        successHandle(res, newPost);
-      } else {
-        return next(appError(400, 'user', next));
-      }
+      successHandle(res, newPost);
     }
   },
   async delPosts(req, res, next) {
