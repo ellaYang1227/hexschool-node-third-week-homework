@@ -4,7 +4,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const app = express();
-
 const { errorHandle } = require('./service/errorHandle');
 
 require('./connections');
@@ -12,6 +11,7 @@ require('./connections');
 const indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
+const uploadRouter = require('./routes/upload');
 
 // 補捉程式錯誤
 process.on('uncaughtException', (err) => {
@@ -32,6 +32,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
+app.use('/upload', uploadRouter);
 
 // 404 錯誤
 app.use((req, res, next) => {
@@ -81,6 +82,13 @@ app.use((err, req, res, next) => {
     return resErrorProd(err, res);
   } else if (err.name === 'SyntaxError') {
     err.message = 'syntax';
+    err.isOperational = true;
+    return resErrorProd(err, res);
+  } else if (err.message.indexOf('圖片') > -1) {
+    err.isOperational = true;
+    return resErrorProd(err, res);
+  } else if (err.name === 'MulterError' && err.message === 'File too large') {
+    err.message = 'multerErrorSize';
     err.isOperational = true;
     return resErrorProd(err, res);
   } else if (err.code === 11000) {

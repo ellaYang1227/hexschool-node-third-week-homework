@@ -1,9 +1,10 @@
 const validator = require('validator');
+const sizeOf = require('image-size');
 
 const appError = require('../service/appError');
 const { errorMag } = require('../service/errorHandle');
 
-const checkBodyFormat = {
+const customizeValidator = {
   email(email, next) {
     // 是否為 email 格式
     if (!validator.isEmail(email)) {
@@ -35,7 +36,27 @@ const checkBodyFormat = {
     if (sex !== 'male' && sex !== 'female') {
       return next(appError(400, 'sexContent', next));
     }
+  },
+  uploadFiles(fileslen, next) {
+    // 是否有上傳檔案
+    if (!fileslen) {
+      return next(appError(400, 'uploadFiles', next));
+    }
+  },
+  imgEqualSize(fileBuffer, next) {
+    // 圖片寬高比 1:1
+    const dimensions = sizeOf(fileBuffer);
+    if (dimensions.width !== dimensions.height) {
+      return next(appError(400, 'imgEqualSize', next));
+    }
+  },
+  imgWidthSize(fileBuffer, next) {
+    // 解析度寬度至少 300 像素以上
+    const dimensions = sizeOf(fileBuffer);
+    if (300 > dimensions.width) {
+      return next(appError(400, 'imgWidthSize', next));
+    }
   }
 };
 
-module.exports = checkBodyFormat;
+module.exports = customizeValidator;

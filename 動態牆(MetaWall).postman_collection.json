@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "users",
+			"name": "users(會員功能)",
 			"item": [
 				{
 					"name": "取得個人資料",
@@ -47,7 +47,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"辛辛辛辛辛\",\r\n    \"email\": \"ggggtset795@gmail.com\",\r\n    \"password\": \"1q2w3e4r\"\r\n}",
+							"raw": "{\r\n    \"name\": \"辛辛辛辛辛\",\r\n    \"email\": \"ggggtset77@gmail.com\",\r\n    \"password\": \"1q2w3e4r\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -74,7 +74,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"ggggtset795@gmail.com\",\r\n    \"password\": \"q1w2e3r4\"\r\n}",
+							"raw": "{\r\n    \"email\": \"ggtest@gmail.com\",\r\n    \"password\": \"1q2w3e4r\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -140,7 +140,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"王7\",\r\n    \"sex\": \"female\"\r\n}",
+							"raw": "{\r\n    \"name\": \"heroku 123\",\r\n    \"sex\": \"male\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -163,7 +163,7 @@
 			]
 		},
 		{
-			"name": "posts",
+			"name": "posts(動態貼文)",
 			"item": [
 				{
 					"name": "取得所有貼文",
@@ -211,7 +211,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"image\": \"\",\r\n    \"content\": \"11111\"\r\n}",
+							"raw": "{\r\n    \"image\": \"https://picsum.photos/id/213/500/200\",\r\n    \"content\": \"20220522\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -265,13 +265,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{url}}/posts/6288b06286f1244bf2b0bb0e",
+							"raw": "{{url}}/posts/62921c37af962a8a85f6154c",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"posts",
-								"6288b06286f1244bf2b0bb0e"
+								"62921c37af962a8a85f6154c"
 							]
 						}
 					},
@@ -305,6 +305,50 @@
 							"path": [
 								"posts",
 								"6289dc500c0852996b6fea3f"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "其他",
+			"item": [
+				{
+					"name": "上傳圖片",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "",
+									"type": "file",
+									"src": "/C:/Users/yanzi1227/Downloads/新增專案.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/upload?unit=user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"upload"
+							],
+							"query": [
+								{
+									"key": "unit",
+									"value": "user"
+								}
 							]
 						}
 					},

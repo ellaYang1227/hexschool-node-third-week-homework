@@ -5,7 +5,7 @@ const { generateSendJWT } = require('../service/auth');
 const successHandle = require('../service/successHandle');
 const appError = require('../service/appError');
 const checkBodyRequired = require('../tools/checkBodyRequired');
-const checkBodyFormat = require('../tools/checkBodyFormat');
+const customizeValidator = require('../tools/customizeValidator');
 
 const bcryptSalt = 12;
 
@@ -22,9 +22,9 @@ const users = {
     );
 
     if (bodyResultIsPass) {
-      checkBodyFormat.email(data.email, next);
-      checkBodyFormat.password(data.password, next);
-      checkBodyFormat.name(data.name, next);
+      customizeValidator.email(data.email, next);
+      customizeValidator.password(data.password, next);
+      customizeValidator.name(data.name, next);
 
       // 密碼加密
       password = await bcrypt.hash(data.password, bcryptSalt);
@@ -49,7 +49,7 @@ const users = {
     );
 
     if (bodyResultIsPass) {
-      checkBodyFormat.email(data.email, next);
+      customizeValidator.email(data.email, next);
 
       // password 欄位在 schema 設定為不顯示，使用 select() 顯示密碼
       const user = await User.findOne({ email: data.email }).select(
@@ -81,13 +81,13 @@ const users = {
     );
 
     if (bodyResultIsPass) {
-      checkBodyFormat.passwordIdentical(
+      customizeValidator.passwordIdentical(
         data.newPassword,
         data.confirmPassword,
         next
       );
 
-      checkBodyFormat.password(data.newPassword, next);
+      customizeValidator.password(data.newPassword, next);
 
       newPassword = await bcrypt.hash(data.newPassword, bcryptSalt);
       await User.findByIdAndUpdate(req.user.id, {
@@ -117,8 +117,8 @@ const users = {
     );
 
     if (bodyResultIsPass) {
-      checkBodyFormat.name(data.name, next);
-      checkBodyFormat.sex(data.sex, next);
+      customizeValidator.name(data.name, next);
+      customizeValidator.sex(data.sex, next);
       // (待補)photo 格式 error 回饋 week7
 
       await User.findByIdAndUpdate(req.user.id, data, {
