@@ -10,44 +10,13 @@
 			"name": "users(會員功能)",
 			"item": [
 				{
-					"name": "取得個人資料",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/users/profile",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"users",
-								"profile"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "註冊",
+					"name": "1.註冊",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"辛辛辛辛辛\",\r\n    \"email\": \"ggggtset77@gmail.com\",\r\n    \"password\": \"1q2w3e4r\"\r\n}",
+							"raw": "{\r\n    \"name\": \"辛辛辛辛辛\",\r\n    \"email\": \"tset01@gmail.com\",\r\n    \"password\": \"1q2w3e4r\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -68,13 +37,13 @@
 					"response": []
 				},
 				{
-					"name": "登入",
+					"name": "2.登入",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"ggtest@gmail.com\",\r\n    \"password\": \"1q2w3e4r\"\r\n}",
+							"raw": "{\r\n    \"email\": \"tset01@gmail.com\",\r\n    \"password\": \"1q2w3e4r\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -95,7 +64,7 @@
 					"response": []
 				},
 				{
-					"name": "重設密碼",
+					"name": "3.重設密碼",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -128,7 +97,38 @@
 					"response": []
 				},
 				{
-					"name": "更新個人資料",
+					"name": "4.取得個人資料",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/profile",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.更新個人資料",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -140,7 +140,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"heroku 123\",\r\n    \"sex\": \"male\"\r\n}",
+							"raw": "{\r\n    \"name\": \"heroku 123\",\r\n    \"sex\": \"male\",\r\n    \"photo\": \"https://i.imgur.com/UiHfzz6.png\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -163,10 +163,113 @@
 			]
 		},
 		{
+			"name": "users(會員按讚追蹤動態)",
+			"item": [
+				{
+					"name": "1.追蹤朋友",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/{{userID}}/follow",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"{{userID}}",
+								"follow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2.取消追蹤朋友",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/{{userID}}/unfollow",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"{{userID}}",
+								"unfollow"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.取得個人按讚列表",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/getLikeList",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"getLikeList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4.取得個人追蹤名單",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/users/following",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"following"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "posts(動態貼文)",
 			"item": [
 				{
-					"name": "取得所有貼文",
+					"name": "1.取得所有貼文",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -199,7 +302,41 @@
 					"response": []
 				},
 				{
-					"name": "新增單筆貼文",
+					"name": "2.取得單一貼文",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/posts/{{postID}}?sort=&keyword=",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"posts",
+								"{{postID}}"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": ""
+								},
+								{
+									"key": "keyword",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3.新增單筆貼文",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -211,7 +348,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"image\": \"https://picsum.photos/id/213/500/200\",\r\n    \"content\": \"20220522\"\r\n}",
+							"raw": "{\r\n    \"image\": \"https://i.imgur.com/TMu0z0l.jpg\",\r\n    \"content\": \"貓\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -231,7 +368,126 @@
 					"response": []
 				},
 				{
-					"name": "刪除所有貼文",
+					"name": "4.新增一則貼文的讚",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/posts/{{postID}}/like",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"posts",
+								"{{postID}}",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5.取消一則貼文的讚",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/posts/{{postID}}/unlike",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"posts",
+								"{{postID}}",
+								"unlike"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6.新增一則貼文的留言",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"comment\": \"12356\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/posts/{{postID}}/comment",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"posts",
+								"{{postID}}",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7.取得個人所有貼文列表",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/posts/user/{{userID}}?sort=&keyword=",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"posts",
+								"user",
+								"{{userID}}"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": ""
+								},
+								{
+									"key": "keyword",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(額外)刪除所有貼文",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -254,7 +510,7 @@
 					"response": []
 				},
 				{
-					"name": "刪除單筆貼文",
+					"name": "(額外)刪除單筆貼文",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -265,20 +521,20 @@
 							}
 						],
 						"url": {
-							"raw": "{{url}}/posts/62921c37af962a8a85f6154c",
+							"raw": "{{url}}/posts/{{postID}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"posts",
-								"62921c37af962a8a85f6154c"
+								"{{postID}}"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "編輯單筆貼文",
+					"name": "(額外)編輯單筆貼文",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -290,7 +546,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"image\": \"https://picsum.photos/id/237/500/300\",\r\n    \"content\": \"修改 content\"\r\n}",
+							"raw": "{\r\n    \"image\": \"https://i.imgur.com/bm657AJ.jpg\",\r\n    \"content\": \"1111\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -298,13 +554,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/posts/6289dc500c0852996b6fea3f",
+							"raw": "{{url}}/posts/{{postID}}",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"posts",
-								"6289dc500c0852996b6fea3f"
+								"{{postID}}"
 							]
 						}
 					},
@@ -316,7 +572,7 @@
 			"name": "其他",
 			"item": [
 				{
-					"name": "上傳圖片",
+					"name": "1.上傳圖片",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -332,12 +588,12 @@
 								{
 									"key": "",
 									"type": "file",
-									"src": "/C:/Users/yanzi1227/Downloads/新增專案.png"
+									"src": "/C:/Users/yanzi1227/Downloads/pexels-leonardo-lamas-7001709.jpg"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{url}}/upload?unit=user",
+							"raw": "{{url}}/upload?unit=post",
 							"host": [
 								"{{url}}"
 							],
@@ -347,8 +603,37 @@
 							"query": [
 								{
 									"key": "unit",
-									"value": "user"
+									"value": "post"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "comments(貼文留言)",
+			"item": [
+				{
+					"name": "(額外)刪除一則貼文的留言",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/comments/{{commentID}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"comments",
+								"{{commentID}}"
 							]
 						}
 					},

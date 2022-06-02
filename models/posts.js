@@ -22,25 +22,30 @@ const postSchema = new mongoose.Schema(
       required: [true, '貼文內容必填'],
       cast: false
     },
-    likes: {
-      type: Number,
-      default: 0,
-      cast: false
-    },
-    comments: {
-      type: Number,
-      default: 0,
-      cast: false
-    },
+    likes: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
+    ],
     createdAt: {
       type: Date,
       default: Date.now
     }
   },
   {
-    versionKey: false // 移除欄位 __v
+    versionKey: false, // 移除欄位 __v
+    toJSON: { virtuals: true }, // postSchema.virtual 設定
+    toObject: { virtuals: true } // postSchema.virtual 設定
   }
 );
+
+// 使用到才引用
+postSchema.virtual('comments', {
+  ref: 'Comment',
+  foreignField: 'post',
+  localField: '_id'
+});
 
 const Post = mongoose.model('Post', postSchema);
 

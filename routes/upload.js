@@ -6,7 +6,7 @@ const { isAuth } = require('../service/auth');
 const upload = require('../service/image');
 const handleErrorAsync = require('../service/handleErrorAsync');
 
-/* 上傳圖片 */
+/* 1.上傳圖片 */
 router.post('/', isAuth, upload, handleErrorAsync(uploadControllers.postImg));
 
 module.exports = router;

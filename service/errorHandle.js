@@ -1,6 +1,7 @@
 // 錯誤訊息
 const errorMag = {
   id: '沒有此 _id',
+  idOrNotBelong: '沒有此 _id 或不屬於您',
   data: '沒有資料或空值',
   requireds: '必填欄位',
   validation: '格式錯誤',
@@ -15,7 +16,10 @@ const errorMag = {
   multerErrorSize: '圖片檔案過大，僅限 2mb 以下檔案',
   imgEqualSize: '圖片寬高比必需為 1:1，請重新輸入',
   imgWidthSize: '解析度寬度至少 300 像素以上，請重新輸入',
+  followingOwn: '您無法追蹤自己',
+  unfollowingOwn: '您取消無法追蹤自己',
   noAuthorization: '您尚未登入！',
+  jwt: 'Token 認證錯誤，請重新登入',
   axios: 'axios 連線錯誤',
   routing: '沒有此路由',
   syntax: '語法錯誤',

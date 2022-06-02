@@ -6,12 +6,16 @@ const checkBodyRequired = (requireds, method, body, next) => {
   let errors = [];
   requireds.forEach((item) => {
     // POST - 不能沒有傳 requireds 欄位名稱
-    // PATCH - 只要有傳 requireds 欄位名稱一個即可
+    // PATCH - body 只要有傳 requireds 欄位名稱一個即可
     if (
       (method === 'POST' && body[item] === undefined) ||
       (method === 'PATCH' && JSON.stringify(body) === '{}')
     ) {
-      errors.push(`${item} ${errorMag.requireds}`);
+      if (method === 'POST') {
+        errors.push(`${item} ${errorMag.requireds}`);
+      } else {
+        return next(appError(400, 'data', next));
+      }
     } else if (
       body[item] === '' ||
       (Array.isArray(body[item]) && !body[item].length)

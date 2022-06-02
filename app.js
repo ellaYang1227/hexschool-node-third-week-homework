@@ -12,6 +12,7 @@ const indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const usersRouter = require('./routes/users');
 const uploadRouter = require('./routes/upload');
+const commentRouter = require('./routes/comments');
 
 // 補捉程式錯誤
 process.on('uncaughtException', (err) => {
@@ -33,6 +34,7 @@ app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/users', usersRouter);
 app.use('/upload', uploadRouter);
+app.use('/comments', commentRouter);
 
 // 404 錯誤
 app.use((req, res, next) => {

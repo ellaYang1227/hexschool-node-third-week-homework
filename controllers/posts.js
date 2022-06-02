@@ -1,23 +1,46 @@
 const Post = require('../models/posts');
+const Comment = require('../models/comments');
 const successHandle = require('../service/successHandle');
 const appError = require('../service/appError');
 const checkBodyRequired = require('../tools/checkBodyRequired');
+const User = require('../models/users');
 
-const requireds = ['content'];
+const postRequireds = ['content'];
+const commentRequireds = ['comment'];
+
+const getCreatedAtSort = (sort) => {
+  return sort === 'asc' ? 'createdAt' : '-createdAt';
+};
+const userPopulate = { path: 'user', select: 'name photo' };
+const commentsPopulate = { path: 'comments', select: 'comment user createdAt' };
 
 const posts = {
-  async getPosts(req, res, next) {
+  async getPostsOrPost(req, res, next) {
+    const _id = req.params.id;
     const { sort, keyword } = req.query;
-    const createdAtSort = sort === 'asc' ? 'createdAt' : '-createdAt';
-    const posts = await Post.find({ content: new RegExp(keyword) })
-      .sort(createdAtSort)
-      .populate({ path: 'user', select: 'name photo' });
-    successHandle(res, posts);
+    const createdAtSort = getCreatedAtSort(sort);
+    const find = { content: new RegExp(keyword) };
+    let data;
+    // 有傳 id 取得單一貼文；反之則全部貼文
+    if (_id) {
+      find._id = _id;
+      data = await Post.findOne(find)
+        .sort(createdAtSort)
+        .populate(userPopulate)
+        .populate(commentsPopulate);
+    } else {
+      data = await Post.find(find)
+        .sort(createdAtSort)
+        .populate(userPopulate)
+        .populate(commentsPopulate);
+    }
+
+    successHandle(res, data);
   },
   async addPost(req, res, next) {
     const data = req.body;
     const bodyResultIsPass = checkBodyRequired(
-      requireds,
+      postRequireds,
       req.method,
       data,
       next
@@ -27,17 +50,94 @@ const posts = {
       const newPost = await Post.create({
         user: req.user.id,
         image: data.image,
-        content: data.content,
-        type: data.type,
-        tags: data.tags
+        content: data.content
       });
 
       successHandle(res, newPost);
     }
   },
+  async addPostLike(req, res, next) {
+    const _id = req.params.id;
+    await Post.findOneAndUpdate(
+      { _id },
+      { $addToSet: { likes: req.user.id } },
+      {
+        new: true,
+        runValidators: true
+      }
+    ).then((update) => {
+      if (update) {
+        successHandle(res, update);
+      } else {
+        return next(appError(400, 'id', next));
+      }
+    });
+  },
+  async postUnlike(req, res, next) {
+    const _id = req.params.id;
+    await Post.findOneAndUpdate(
+      { _id },
+      { $pull: { likes: req.user.id } },
+      {
+        new: true,
+        runValidators: true
+      }
+    ).then((update) => {
+      if (update) {
+        successHandle(res, update);
+      } else {
+        return next(appError(400, 'id', next));
+      }
+    });
+  },
+  async addPostComment(req, res, next) {
+    const data = req.body;
+    const bodyResultIsPass = checkBodyRequired(
+      commentRequireds,
+      req.method,
+      data,
+      next
+    );
+
+    if (bodyResultIsPass) {
+      await Comment.create({
+        post: req.params.id,
+        user: req.user.id,
+        comment: data.comment
+      });
+
+      const post = await Post.findById(req.params.id)
+        .populate(userPopulate)
+        .populate(commentsPopulate);
+
+      successHandle(res, post);
+    }
+  },
+  async getUserPosts(req, res, next) {
+    const user = req.params.userId;
+    const { sort, keyword } = req.query;
+    const createdAtSort = getCreatedAtSort(sort);
+    const userData = await User.findById(user);
+    if (userData) {
+      const posts = await Post.find({
+        user,
+        content: new RegExp(keyword)
+      })
+        .sort(createdAtSort)
+        .populate(userPopulate)
+        .populate(commentsPopulate);
+      successHandle(res, {
+        user: userData,
+        posts
+      });
+    } else {
+      return next(appError(404, 'memberNotExist', next));
+    }
+  },
   async delPosts(req, res, next) {
+    const user = req.user.id;
     if (req.originalUrl === '/posts') {
-      await Post.deleteMany({});
+      await Post.deleteMany({ user });
       successHandle(res, []);
     } else {
       return next(appError(404, 'routing', next));
@@ -45,38 +145,44 @@ const posts = {
   },
   async delPost(req, res, next) {
     const id = req.params.id;
-    await Post.findByIdAndDelete(id)
+    const user = req.user.id;
+    await Post.findOneAndDelete({ user, _id: id })
+      .populate(userPopulate)
+      .populate(commentsPopulate)
       .then((delPost) => {
-        if (delPost._id) {
+        if (delPost) {
           successHandle(res, delPost);
+        } else {
+          return next(appError(400, 'idOrNotBelong', next));
         }
-      })
-      .catch((error) => {
-        console.error(error);
-        return next(appError(400, 'id', next));
       });
   },
   async etidPost(req, res, next) {
     const id = req.params.id;
+    const user = req.user.id;
     const data = req.body;
+
     const bodyResultIsPass = checkBodyRequired(
-      requireds,
+      postRequireds,
       req.method,
       data,
       next
     );
 
     if (bodyResultIsPass) {
-      await Post.findByIdAndUpdate(id, data, {
+      await Post.findOneAndUpdate({ user, _id: id }, data, {
         new: true,
         runValidators: true
-      }).then((update) => {
-        if (update) {
-          successHandle(res, update);
-        } else {
-          return next(appError(400, 'id', next));
-        }
-      });
+      })
+        .populate(userPopulate)
+        .populate(commentsPopulate)
+        .then((update) => {
+          if (update) {
+            successHandle(res, update);
+          } else {
+            return next(appError(400, 'idOrNotBelong', next));
+          }
+        });
     }
   }
 };
