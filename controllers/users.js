@@ -6,6 +6,7 @@ const { generateSendJWT } = require('../service/auth');
 const successHandle = require('../service/successHandle');
 const appError = require('../service/appError');
 const checkBodyRequired = require('../tools/checkBodyRequired');
+const checkObjectId = require('../tools/checkObjectId');
 const customizeValidator = require('../tools/customizeValidator');
 
 const bcryptSalt = 12;
@@ -142,30 +143,34 @@ const users = {
       return next(appError(400, 'followingOwn', next));
     }
 
-    // 更新到追隨者
-    await User.updateOne(
-      {
-        _id: followingId,
-        'following.user': { $ne: followersId }
-      },
-      {
-        $addToSet: { following: { user: followersId } }
-      }
-    );
+    checkObjectId.format(followersId, next);
+    const user = await checkObjectId.findById('User', followersId, next);
+    if (user) {
+      // 更新到追隨者
+      await User.updateOne(
+        {
+          _id: followingId,
+          'following.user': { $ne: followersId }
+        },
+        {
+          $addToSet: { following: { user: followersId } }
+        }
+      );
 
-    // 更新到跟隨者
-    await User.updateOne(
-      {
-        _id: followersId,
-        'followers.user': { $ne: followingId }
-      },
-      {
-        $addToSet: { followers: { user: followingId } }
-      }
-    );
+      // 更新到跟隨者
+      await User.updateOne(
+        {
+          _id: followersId,
+          'followers.user': { $ne: followingId }
+        },
+        {
+          $addToSet: { followers: { user: followingId } }
+        }
+      );
 
-    const followers = await User.findById(followersId);
-    successHandle(res, followers);
+      const followers = await User.findById(followersId);
+      successHandle(res, followers);
+    }
   },
   async unfollow(req, res, next) {
     const followersId = req.params.id;
@@ -176,28 +181,33 @@ const users = {
       return next(appError(400, 'unfollowingOwn', next));
     }
 
-    // 更新到追隨者
-    await User.updateOne(
-      {
-        _id: followingId
-      },
-      {
-        $pull: { following: { user: followersId } }
-      }
-    );
+    checkObjectId.format(followersId, next);
+    const user = await checkObjectId.findById('User', followersId, next);
 
-    // 更新到跟隨者
-    await User.updateOne(
-      {
-        _id: followersId
-      },
-      {
-        $pull: { followers: { user: followingId } }
-      }
-    );
+    if (user) {
+      // 更新到追隨者
+      await User.updateOne(
+        {
+          _id: followingId
+        },
+        {
+          $pull: { following: { user: followersId } }
+        }
+      );
 
-    const followers = await User.findById(followersId);
-    successHandle(res, followers);
+      // 更新到跟隨者
+      await User.updateOne(
+        {
+          _id: followersId
+        },
+        {
+          $pull: { followers: { user: followingId } }
+        }
+      );
+
+      const followers = await User.findById(followersId);
+      successHandle(res, followers);
+    }
   },
   async getLikeList(req, res, next) {
     const likeList = await Post.find({

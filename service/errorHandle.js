@@ -1,5 +1,6 @@
 // 錯誤訊息
 const errorMag = {
+  objectIdFormat: '_id 不符合 ObjectId 格式',
   id: '沒有此 _id',
   idOrNotBelong: '沒有此 _id 或不屬於您',
   data: '沒有資料或空值',
@@ -10,7 +11,7 @@ const errorMag = {
   emailExist: '帳號已被註冊，請替換新的 Email！',
   memberNotExist: '此會員不存在',
   signIn: '帳號或密碼錯誤，請重新輸入！',
-  nameMinLength: '至少 2 個字元以上',
+  nameMinLength: '暱稱至少 2 個字元以上',
   sexContent: '性別只能填寫 male 或 female',
   uploadFiles: '尚未上傳檔案',
   multerErrorSize: '圖片檔案過大，僅限 2mb 以下檔案',

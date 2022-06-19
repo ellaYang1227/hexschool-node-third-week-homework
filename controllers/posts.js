@@ -3,6 +3,7 @@ const Comment = require('../models/comments');
 const successHandle = require('../service/successHandle');
 const appError = require('../service/appError');
 const checkBodyRequired = require('../tools/checkBodyRequired');
+const checkObjectId = require('../tools/checkObjectId');
 const User = require('../models/users');
 
 const postRequireds = ['content'];
@@ -23,11 +24,14 @@ const posts = {
     let data;
     // 有傳 id 取得單一貼文；反之則全部貼文
     if (_id) {
-      find._id = _id;
-      data = await Post.findOne(find)
-        .sort(createdAtSort)
-        .populate(userPopulate)
-        .populate(commentsPopulate);
+      checkObjectId.format(_id, next);
+      const findPost = checkObjectId.findById('Post', _id, next);
+      if (findPost) {
+        data = await Post.findOne(find)
+          .sort(createdAtSort)
+          .populate(userPopulate)
+          .populate(commentsPopulate);
+      }
     } else {
       data = await Post.find(find)
         .sort(createdAtSort)
@@ -58,37 +62,48 @@ const posts = {
   },
   async addPostLike(req, res, next) {
     const _id = req.params.id;
-    await Post.findOneAndUpdate(
-      { _id },
-      { $addToSet: { likes: req.user.id } },
-      {
-        new: true,
-        runValidators: true
-      }
-    ).then((update) => {
-      if (update) {
-        successHandle(res, update);
-      } else {
-        return next(appError(400, 'id', next));
-      }
-    });
+
+    checkObjectId.format(_id, next);
+    const findPost = checkObjectId.findById('Post', _id, next);
+
+    if (findPost) {
+      await Post.findOneAndUpdate(
+        { _id },
+        { $addToSet: { likes: req.user.id } },
+        {
+          new: true,
+          runValidators: true
+        }
+      ).then((update) => {
+        if (update) {
+          successHandle(res, update);
+        } else {
+          return next(appError(400, 'id', next));
+        }
+      });
+    }
   },
   async postUnlike(req, res, next) {
     const _id = req.params.id;
-    await Post.findOneAndUpdate(
-      { _id },
-      { $pull: { likes: req.user.id } },
-      {
-        new: true,
-        runValidators: true
-      }
-    ).then((update) => {
-      if (update) {
-        successHandle(res, update);
-      } else {
-        return next(appError(400, 'id', next));
-      }
-    });
+    checkObjectId.format(_id, next);
+    const findPost = checkObjectId.findById('Post', _id, next);
+
+    if (findPost) {
+      await Post.findOneAndUpdate(
+        { _id },
+        { $pull: { likes: req.user.id } },
+        {
+          new: true,
+          runValidators: true
+        }
+      ).then((update) => {
+        if (update) {
+          successHandle(res, update);
+        } else {
+          return next(appError(400, 'id', next));
+        }
+      });
+    }
   },
   async addPostComment(req, res, next) {
     const data = req.body;
@@ -100,17 +115,23 @@ const posts = {
     );
 
     if (bodyResultIsPass) {
-      await Comment.create({
-        post: req.params.id,
-        user: req.user.id,
-        comment: data.comment
-      });
+      const _id = req.params.id;
+      checkObjectId.format(_id, next);
+      const findPost = checkObjectId.findById('Post', _id, next);
 
-      const post = await Post.findById(req.params.id)
-        .populate(userPopulate)
-        .populate(commentsPopulate);
+      if (findPost) {
+        await Comment.create({
+          post: _id,
+          user: req.user.id,
+          comment: data.comment
+        });
 
-      successHandle(res, post);
+        const post = await Post.findById(_id)
+          .populate(userPopulate)
+          .populate(commentsPopulate);
+
+        successHandle(res, post);
+      }
     }
   },
   async getUserPosts(req, res, next) {
@@ -144,9 +165,10 @@ const posts = {
     }
   },
   async delPost(req, res, next) {
-    const id = req.params.id;
+    const _id = req.params.id;
     const user = req.user.id;
-    await Post.findOneAndDelete({ user, _id: id })
+    checkObjectId.format(_id, next);
+    await Post.findOneAndDelete({ user, _id })
       .populate(userPopulate)
       .populate(commentsPopulate)
       .then((delPost) => {
@@ -158,7 +180,7 @@ const posts = {
       });
   },
   async etidPost(req, res, next) {
-    const id = req.params.id;
+    const _id = req.params.id;
     const user = req.user.id;
     const data = req.body;
 
@@ -170,7 +192,8 @@ const posts = {
     );
 
     if (bodyResultIsPass) {
-      await Post.findOneAndUpdate({ user, _id: id }, data, {
+      checkObjectId.format(_id, next);
+      await Post.findOneAndUpdate({ user, _id }, data, {
         new: true,
         runValidators: true
       })
