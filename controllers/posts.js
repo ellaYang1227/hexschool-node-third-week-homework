@@ -21,11 +21,12 @@ const posts = {
     const { sort, keyword } = req.query;
     const createdAtSort = getCreatedAtSort(sort);
     const find = { content: new RegExp(keyword) };
+    find._id = _id;
     let data;
     // 有傳 id 取得單一貼文；反之則全部貼文
-    if (_id) {
-      checkObjectId.format(_id, next);
-      const findPost = checkObjectId.findById('Post', _id, next);
+    if (find._id) {
+      checkObjectId.format(find._id, next);
+      const findPost = checkObjectId.findById('Post', find._id, next);
       if (findPost) {
         data = await Post.findOne(find)
           .sort(createdAtSort)
